@@ -18,6 +18,8 @@ sys.setdefaultencoding('utf-8')
 
 from selenium import webdriver
 import time
+
+
 def is_element_exist(driver, xpath):
     """
     输入xpath 判断这个元素存在与否
@@ -30,6 +32,7 @@ def is_element_exist(driver, xpath):
         return True
     except NoSuchElementException:
         return False
+
 
 def open_url():
     driver = webdriver.Chrome()
@@ -49,32 +52,44 @@ def click_yinzhen(driver):
 
 def click_beiyinzhen(driver):
     driver.find_element_by_id("queryQuotedb").click()
-    time.sleep(5)
+    while True:
+        time.sleep(3)
+        if is_element_exist(driver,".//*[@id='citingLiteratureTable']/table/tbody/tr[1]/td[2]"):
+            break
 
 
 def get_info(driver):
     driver.find_element_by_xpath(".//*[@id='citingLiteratureTable']/table/thead/tr/th[1]/input").click()
-    while True:#确保全部选中
-        if driver.find_element_by_xpath(".//*[@id='citingLiteratureTable']/table/tbody/tr[1]/td[1]/input").is_selected():
+    while True:  # 确保全部选中
+        if driver.find_element_by_xpath(
+                ".//*[@id='citingLiteratureTable']/table/tbody/tr[1]/td[1]/input").is_selected():
             break
         else:
             driver.find_element_by_xpath(".//*[@id='citingLiteratureTable']/table/thead/tr/th[1]/input").click()
-    driver.find_element_by_css_selector("#containerTable2 > div.table-header > div.btn-group > a.btn.btn-view").click() #点击 浏览文献按钮
-    driver.switch_to_window(driver.window_handles[1])#切换到当前页
-    time.sleep(10)
-    driver.find_element_by_xpath("//li[1]/div/span").click() #点击左侧第n条信息
-    famin_mingcheng=driver.find_element_by_xpath("//div[@id='tabContent_1_id']/div[2]/table/tbody/tr[3]/td[2]/div").text
-    shenqinghao=driver.find_element_by_xpath("//td[2]/div").text
-    shenqingri=driver.find_element_by_xpath("//tr[2]/td[2]/div").text
-    gongkaihao=driver.find_element_by_xpath("//tr[3]/td[2]/div").text
-    gongkairi=driver.find_element_by_xpath("//tr[4]/td[2]/div").text
-    ipc=driver.find_element_by_xpath("//tr[5]/td[2]/div").text
-    shengqingren=driver.find_element_by_xpath("//tr[6]/td[2]/div").text
-    famingren=driver.find_element_by_xpath("//tr[7]/td[2]/div").text
-    youxianquanhao=driver.find_element_by_xpath("//tr[8]/td[2]/div").text
-    youxianquanri=driver.find_element_by_xpath("//tr[9]/td[2]/div").text
-    shenqingrendizhi=driver.find_element_by_xpath("//tr[10]/td[2]/div").text
-    driver.close() #关闭爬取到的东西所在的标签页
+    driver.find_element_by_css_selector(
+        "#containerTable2 > div.table-header > div.btn-group > a.btn.btn-view").click()  # 点击 浏览文献按钮
+    driver.switch_to_window(driver.window_handles[1])  # 切换到当前页
+    while True:
+        time.sleep(3)
+        if is_element_exist(driver, "//tr[2]/td[2]/div"):
+            break
+    time.sleep(2)
+    driver.find_element_by_xpath("//li[1]/div/span").click()  # 点击左侧第n条信息
+    famin_mingcheng = driver.find_element_by_xpath(
+        "//div[@id='tabContent_1_id']/div[2]/table/tbody/tr[3]/td[2]/div").text
+    shenqinghao = driver.find_element_by_xpath("//td[2]/div").text
+    shenqingri = driver.find_element_by_xpath("//tr[2]/td[2]/div").text
+    gongkaihao = driver.find_element_by_xpath("//tr[3]/td[2]/div").text
+    gongkairi = driver.find_element_by_xpath("//tr[4]/td[2]/div").text
+    ipc = driver.find_element_by_xpath("//tr[5]/td[2]/div").text
+    shengqingren = driver.find_element_by_xpath("//tr[6]/td[2]/div").text
+    famingren = driver.find_element_by_xpath("//tr[7]/td[2]/div").text
+    youxianquanhao = driver.find_element_by_xpath("//tr[8]/td[2]/div").text
+    youxianquanri = driver.find_element_by_xpath("//tr[9]/td[2]/div").text
+    shenqingrendizhi = driver.find_element_by_xpath("//tr[10]/td[2]/div").text
+    driver.close()  # 关闭爬取到的东西所在的标签页
+    driver.switch_to_window(driver.window_handles[0])  # 切换到当前页
+    print driver.title
     print famin_mingcheng
     print shenqinghao
     print shenqingri
@@ -86,7 +101,6 @@ def get_info(driver):
     print youxianquanhao
     print youxianquanri
     print shenqingrendizhi
-
 
 
 if __name__ == '__main__':
