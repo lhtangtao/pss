@@ -142,7 +142,8 @@ def get_all_page(driver, sns):
     js = "window.scrollTo(0,document.body.scrollHeight)"
     driver.execute_script(js)
     driver.find_element_by_xpath("//div[3]/div[3]").click()
-    page_num = driver.find_element_by_xpath("//div[3]/div[3]").text.replace(" ", "").split(u"共")[1].split(u"条")[0]
+    page_num = driver.find_element_by_xpath("//div[3]/div[3]").text.replace(" ", "").split(u"共")[1].split(u"条")[
+        0]  # 取出一共有多少条
     page_num = int(page_num) / 5 + 1  #
     get_info_one_page(driver, sns)
     for i in range(2, page_num + 1):
@@ -150,11 +151,16 @@ def get_all_page(driver, sns):
         # driver.find_element_by_xpath("//div[@id='citingLiteraturePage']/ul/li[" + str(i) + "]/a").click()
         driver.find_element_by_link_text(str(i)).click()
         get_info_one_page(driver, sns)
+    driver.quit()
 
 
-if __name__ == '__main__':
-    sn = "CN1283015A"
+def info_by_sn(sn):
     src_driver = open_url()
     key_word(sn, src_driver)
     click_beiyinzhen(src_driver)
     get_all_page(src_driver, sn)
+
+
+if __name__ == '__main__':
+    sn = "CN1283015A"
+    info_by_sn(sn)
