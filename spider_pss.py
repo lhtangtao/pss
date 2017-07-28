@@ -161,6 +161,3 @@ def info_by_sn(sn):
     get_all_page(src_driver, sn)
 
 
-if __name__ == '__main__':
-    sn = "CN1283015A"
-    info_by_sn(sn)

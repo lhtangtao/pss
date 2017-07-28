@@ -2,6 +2,8 @@
 # encoding: utf-8
 import sys
 
+import xlsxwriter
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 """
@@ -16,9 +18,20 @@ import xlwt
 import xlrd
 from xlutils.copy import copy
 
+def clear():
+    oldWb = xlrd.open_workbook('demo.xlsx', "sheet1")
+    table = oldWb.sheets()[0]
+    nrows = table.nrows  # 行数
+    ncols = table.ncols
+    print nrows
+    print ncols
+    workbook = xlsxwriter.Workbook('demo.xlsx')
+    worksheet = workbook.add_worksheet()
+    for i in range(0, ncols):
+        worksheet.write(0, i, table.cell(0, i).value)
 
 def save_to_excel(infos):
-    oldWb = xlrd.open_workbook('demo.xls', "sheet1", formatting_info=True)
+    oldWb = xlrd.open_workbook('demo.xlsx', "sheet1")
     table = oldWb.sheets()[0]
     nrows = table.nrows  # 行数
     newWb = copy(oldWb)
@@ -39,7 +52,7 @@ def save_to_excel(infos):
     if len(infos) == 13:
         newWs.write(nrows, 11, infos[11])
         newWs.write(nrows, 12, infos[12])
-
-    newWb.save('demo.xls')
-
+    newWb.save('demo.xlsx')
+if __name__ == '__main__':
+    clear()
 
