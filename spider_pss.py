@@ -75,15 +75,17 @@ def record_info(driver, snword):
     :return:
     """
     driver.switch_to_window(driver.window_handles[1])  # 切换到当前页
-    while True:
+    while True:  # 此循环的作用是确保能出现有用的数据
         time.sleep(1)
         if is_element_exist(driver, "//tr[2]/td[2]/div"):
             break
     time.sleep(1)
-    for i in range(1, 6):
+    file_len = len(driver.find_element_by_id('patent_list').find_elements_by_tag_name('li'))
+    for i in range(1, file_len):
         if is_element_exist(driver, "//li[" + str(i) + "]/div/span"):
-            if i == 5:
-                pass
+            if i == 6:
+                js="document.getElementById('patent_list').setAttribute('style', 'bottom:0');"
+                driver.execute_script(js)
             driver.find_element_by_xpath("//li[" + str(i) + "]/div/span").click()  # 点击左侧第n条信息
             while True:
                 time.sleep(3)
@@ -144,7 +146,7 @@ def get_all_page(driver, sns):
     driver.find_element_by_xpath("//div[3]/div[3]").click()
     page_num = driver.find_element_by_xpath("//div[3]/div[3]").text.replace(" ", "").split(u"共")[1].split(u"条")[
         0]  # 取出一共有多少条
-    page_num = int(page_num) / 5 + 1  #
+    page_num = int(page_num) / 5 + 1
     get_info_one_page(driver, sns)
     for i in range(2, page_num + 1):
         time.sleep(2)
@@ -159,5 +161,3 @@ def info_by_sn(sn):
     key_word(sn, src_driver)
     click_beiyinzhen(src_driver)
     get_all_page(src_driver, sn)
-
-

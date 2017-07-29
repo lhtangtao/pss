@@ -14,9 +14,9 @@ sys.setdefaultencoding('utf-8')
 @file: excel.py
 @time: 2017/7/22 13:08
 """
-import xlwt
 import xlrd
 from xlutils.copy import copy
+
 
 def clear():
     oldWb = xlrd.open_workbook('demo.xlsx', "sheet1")
@@ -29,6 +29,7 @@ def clear():
     worksheet = workbook.add_worksheet()
     for i in range(0, ncols):
         worksheet.write(0, i, table.cell(0, i).value)
+
 
 def save_to_excel(infos):
     oldWb = xlrd.open_workbook('demo.xlsx', "sheet1")
@@ -53,6 +54,7 @@ def save_to_excel(infos):
         newWs.write(nrows, 11, infos[11])
         newWs.write(nrows, 12, infos[12])
     newWb.save('demo.xlsx')
+
+
 if __name__ == '__main__':
     clear()
-
